@@ -1,0 +1,11 @@
+[development]
+host = localhost
+user = user
+pass = password
+name = dev_db
+
+[production]
+host = localhost
+user = user
+pass = pass
+name = live_db
