@@ -1,0 +1,97 @@
+/*! minireset.css v0.0.2 | MIT License | github.com/jgthms/minireset.css */
+/* line 3, /Users/aarona/work/src/github.com/aaronarduino/weekly-schedule/static/css/main/bulma/sass/base/minireset.sass */
+html,
+body,
+p,
+ol,
+ul,
+li,
+dl,
+dt,
+dd,
+blockquote,
+figure,
+fieldset,
+legend,
+textarea,
+pre,
+iframe,
+hr,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin: 0;
+  padding: 0;
+}
+
+/* line 30, /Users/aarona/work/src/github.com/aaronarduino/weekly-schedule/static/css/main/bulma/sass/base/minireset.sass */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-size: 100%;
+  font-weight: normal;
+}
+
+/* line 40, /Users/aarona/work/src/github.com/aaronarduino/weekly-schedule/static/css/main/bulma/sass/base/minireset.sass */
+ul {
+  list-style: none;
+}
+
+/* line 44, /Users/aarona/work/src/github.com/aaronarduino/weekly-schedule/static/css/main/bulma/sass/base/minireset.sass */
+button,
+input,
+select,
+textarea {
+  margin: 0;
+}
+
+/* line 51, /Users/aarona/work/src/github.com/aaronarduino/weekly-schedule/static/css/main/bulma/sass/base/minireset.sass */
+html {
+  box-sizing: border-box;
+}
+
+/* line 54, /Users/aarona/work/src/github.com/aaronarduino/weekly-schedule/static/css/main/bulma/sass/base/minireset.sass */
+* {
+  box-sizing: inherit;
+}
+
+/* line 56, /Users/aarona/work/src/github.com/aaronarduino/weekly-schedule/static/css/main/bulma/sass/base/minireset.sass */
+*:before, *:after {
+  box-sizing: inherit;
+}
+
+/* line 61, /Users/aarona/work/src/github.com/aaronarduino/weekly-schedule/static/css/main/bulma/sass/base/minireset.sass */
+img,
+embed,
+object,
+audio,
+video {
+  height: auto;
+  max-width: 100%;
+}
+
+/* line 70, /Users/aarona/work/src/github.com/aaronarduino/weekly-schedule/static/css/main/bulma/sass/base/minireset.sass */
+iframe {
+  border: 0;
+}
+
+/* line 74, /Users/aarona/work/src/github.com/aaronarduino/weekly-schedule/static/css/main/bulma/sass/base/minireset.sass */
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+/* line 78, /Users/aarona/work/src/github.com/aaronarduino/weekly-schedule/static/css/main/bulma/sass/base/minireset.sass */
+td,
+th {
+  padding: 0;
+  text-align: left;
+}
+
+/*# sourceMappingURL=../../../../bulma/sass/base/minireset.map */

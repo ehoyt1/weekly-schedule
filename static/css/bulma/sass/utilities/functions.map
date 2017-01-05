@@ -1,0 +1,12 @@
+{
+	"version": 3,
+	"file": "../../../main/bulma/sass/utilities/functions.css",
+	"sources": [
+		"../../../main/bulma/sass/utilities/functions.sass"
+	],
+	"sourcesContent": [
+		"@function powerNumber($number, $exp) {\n  $value: 1;\n  @if $exp > 0 {\n    @for $i from 1 through $exp {\n      $value: $value * $number; } }\n  @else if $exp < 0 {\n    @for $i from 1 through -$exp {\n      $value: $value / $number; } }\n  @return $value; }\n\n@function colorLuminance($color) {\n  $color-rgb: ('red': red($color),'green': green($color),'blue': blue($color));\n  @each $name, $value in $color-rgb {\n    $adjusted: 0;\n    $value: $value / 255;\n    @if $value < 0.03928 {\n      $value: $value / 12.92; }\n    @else {\n      $value: ($value + .055) / 1.055;\n      $value: powerNumber($value, 2); }\n    $color-rgb: map-merge($color-rgb, ($name: $value)); }\n  @return (map-get($color-rgb, 'red') * .2126) + (map-get($color-rgb, 'green') * .7152) + (map-get($color-rgb, 'blue') * .0722); }\n\n@function findColorInvert($color) {\n  @if (colorLuminance($color) > 0.55) {\n    @return rgba(black, 0.7); }\n  @else {\n    @return white; } }\n"
+	],
+	"mappings": "",
+	"names": []
+}
