@@ -8,7 +8,7 @@ import (
 
 func showPage(tmpName string, sd siteData, w http.ResponseWriter, req *http.Request) {
 	t := template.New(tmpName)
-	t.Delims("{(", ")}")
+	//t.Delims("{(", ")}")
 
 	t, err := t.ParseFiles("templates/" + tmpName)
 	if err != nil {

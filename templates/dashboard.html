@@ -2,6 +2,7 @@
 <html>
 <head>
 	<title>Weekly Schedule</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 	<link rel="stylesheet" href="/static/css/main.css">
 </head>
 <body>
@@ -9,11 +10,63 @@
   <div class="hero-body">
     <div class="container">
       <h1 class="title">
-        Schedule Table Goes Here. // TODO
+        Weekly Schedule
       </h1>
       <h2 class="subtitle">
-        To Do
+        See all events for a week all in one view.
       </h2>
+    </div>
+  </div>
+</section>
+<section class="section">
+  <div class="columns">
+    <div class="column">
+      <div class="box">
+        Sunday
+      </div>
+    </div>
+    <div class="column">
+      <div class="box">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Monday</th>
+            </tr>
+          </thead>
+          <tbody>
+              {{ range .Monday }}
+              <tr>
+                <td>{{ .Name }} - Id: {{ .ID }} </td>
+              </tr>
+              {{ end }}
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="column">
+      <div class="box">
+        Tuesday
+      </div>
+    </div>
+    <div class="column">
+      <div class="box">
+        Wednesday
+      </div>
+    </div>
+    <div class="column">
+      <div class="box">
+        Thursday
+      </div>
+    </div>
+    <div class="column">
+      <div class="box">
+        Friday
+      </div>
+    </div>
+    <div class="column">
+      <div class="box">
+        Saturday
+      </div>
     </div>
   </div>
 </section>

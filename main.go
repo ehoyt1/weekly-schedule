@@ -14,8 +14,8 @@ import (
 // TODO: create time block struct
 
 type siteData struct {
-	User     string
-	Saturday datastore.Day
+	User   string
+	Monday datastore.Day
 }
 
 const (
@@ -58,10 +58,11 @@ func dashboard(w http.ResponseWriter, r *http.Request) {
 	sd := siteData{}
 
 	var err error
-	sd.Saturday, err = datastore.EventsForDay(globalDb, "2017", "1", "7")
+	sd.Monday, err = datastore.EventsForDay(globalDb, "2017", "1", "7")
 	if err != nil {
 		log.Println(err)
 	}
+	log.Println(sd)
 
 	showPage("dashboard.html", sd, w, r)
 }

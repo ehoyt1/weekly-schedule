@@ -63,7 +63,7 @@ func EventToDb(db *bolt.DB, y string, m string, d string, e Event) error {
 }
 
 func EventsForDay(db *bolt.DB, y string, m string, d string) (Day, error) {
-	out := Day{}
+	var out Day
 
 	// Start the transaction.
 	tx, err := db.Begin(true)
@@ -93,16 +93,17 @@ func EventsForDay(db *bolt.DB, y string, m string, d string) (Day, error) {
 		if err != nil {
 			log.Println(err)
 		}
+		log.Println(tmp)
 		out = append(out, tmp)
 		return nil
 	}); err != nil {
-		return nil, err
+		return out, err
 	}
 
 	// Commit the transaction.
 	if err := tx.Commit(); err != nil {
-		return nil, err
+		return out, err
 	}
 
-	return nil, nil
+	return out, nil
 }
