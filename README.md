@@ -7,4 +7,8 @@ Install go then:
 
 # build and run
 In working dir run:
-`go build && ./weekly-schedule
+`go build && ./weekly-schedule`
+
+# Screenshot
+
+![alt text](static/img/current_screenshot.png "Current Screenshot")

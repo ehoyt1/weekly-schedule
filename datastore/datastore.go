@@ -2,7 +2,8 @@ package datastore
 
 import (
 	"encoding/json"
-	"fmt"
+	"errors"
+	"log"
 	"strconv"
 
 	"github.com/boltdb/bolt"
@@ -23,7 +24,6 @@ func EventToDb(db *bolt.DB, y string, m string, d string, e Event) error {
 	if err != nil {
 		return err
 	}
-	defer tx.Rollback()
 
 	year, err := tx.CreateBucketIfNotExists([]byte(y))
 	if err != nil {
@@ -63,37 +63,47 @@ func EventToDb(db *bolt.DB, y string, m string, d string, e Event) error {
 }
 
 func EventsForDay(db *bolt.DB, y string, m string, d string) (Day, error) {
-
-	// TODO: create out Day var to hold
-	// events from day
+	var out Day
 
 	// Start the transaction.
 	tx, err := db.Begin(true)
 	if err != nil {
-		return nil, err
+		return out, err
 	}
-	defer tx.Rollback()
 
 	year := tx.Bucket([]byte(y))
+	if year == nil {
+		return out, errors.New("Bucket does not exist for: " + y)
+	}
+
 	month := year.Bucket([]byte(m))
+	if month == nil {
+		return out, errors.New("Bucket does not exist for: " + y)
+	}
+
 	day := month.Bucket([]byte(d))
+	if day == nil {
+		return out, errors.New("Bucket does not exist for: " + y)
+	}
 
-	day.ForEach(func(k, v []byte) error {
+	if err := day.ForEach(func(k, v []byte) error {
+		var tmp Event
 
-		// TODO: unmarshal value and store in Event struct
-
-		fmt.Printf("key=%s, value=%s\n", k, v)
+		err := json.Unmarshal(v, &tmp)
+		if err != nil {
+			log.Println(err)
+		}
+		log.Println(tmp)
+		out = append(out, tmp)
 		return nil
-	})
-
-	if err != nil {
-		return nil, err
+	}); err != nil {
+		return out, err
 	}
 
 	// Commit the transaction.
 	if err := tx.Commit(); err != nil {
-		return nil, err
+		return out, err
 	}
 
-	return nil, nil
+	return out, nil
 }
