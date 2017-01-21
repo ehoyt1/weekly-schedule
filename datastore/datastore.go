@@ -2,18 +2,15 @@ package datastore
 
 import (
 	"encoding/json"
+	"errors"
 	"log"
 	"strconv"
 
 	"github.com/boltdb/bolt"
 )
 
-// Day is a custom Slice of events
 type Day []Event
 
-// Event is a struct holding all the data for an event.
-//
-// This will be encoded into the BoltDB database for storage.
 type Event struct {
 	ID        uint64
 	Name      string
@@ -21,54 +18,44 @@ type Event struct {
 	EndTime   string
 }
 
-//EventToDb stores an event struct in the DB based on the date.
 func EventToDb(db *bolt.DB, y string, m string, d string, e Event) error {
-	err := db.Update(func(tx *bolt.Tx) error {
-		_, err := tx.CreateBucketIfNotExists([]byte(y))
-		if err != nil {
-			return err
-		}
-		return nil
-	})
+	// Start the transaction.
+	tx, err := db.Begin(true)
 	if err != nil {
 		return err
 	}
 
-	err = db.Update(func(tx *bolt.Tx) error {
-		year := tx.Bucket([]byte(y))
-		_, err := year.CreateBucketIfNotExists([]byte(m))
-		if err != nil {
-			return err
-		}
-		return nil
-	})
+	year, err := tx.CreateBucketIfNotExists([]byte(y))
 	if err != nil {
 		return err
 	}
 
-	err = db.Update(func(tx *bolt.Tx) error {
-		month := tx.Bucket([]byte(y + "/" + m))
-		day, err := month.CreateBucketIfNotExists([]byte(d))
-		if err != nil {
-			return err
-		}
-
-		// Generate an ID for the new event.
-		eventID, err := day.NextSequence()
-		if err != nil {
-			return err
-		}
-		e.ID = eventID
-
-		// Marshal and save the encoded event.
-		if buf, err := json.Marshal(e); err != nil {
-			return err
-		} else if err := day.Put([]byte(strconv.FormatUint(e.ID, 10)), buf); err != nil {
-			return err
-		}
-		return nil
-	})
+	month, err := year.CreateBucketIfNotExists([]byte(m))
 	if err != nil {
+		return err
+	}
+
+	day, err := month.CreateBucketIfNotExists([]byte(d))
+	if err != nil {
+		return err
+	}
+
+	// Generate an ID for the new event.
+	eventID, err := day.NextSequence()
+	if err != nil {
+		return err
+	}
+	e.ID = eventID
+
+	// Marshal and save the encoded event.
+	if buf, err := json.Marshal(e); err != nil {
+		return err
+	} else if err := day.Put([]byte(strconv.FormatUint(e.ID, 10)), buf); err != nil {
+		return err
+	}
+
+	// Commit the transaction.
+	if err := tx.Commit(); err != nil {
 		return err
 	}
 
@@ -78,18 +65,26 @@ func EventToDb(db *bolt.DB, y string, m string, d string, e Event) error {
 func EventsForDay(db *bolt.DB, y string, m string, d string) (Day, error) {
 	out := Day{}
 
-	// Get events from day.
-	//
 	// Start the transaction.
 	tx, err := db.Begin(true)
 	if err != nil {
-		return nil, err
+		return out, err
 	}
-	defer tx.Rollback()
 
 	year := tx.Bucket([]byte(y))
+	if year == nil {
+		return out, errors.New("Bucket does not exist for: " + y)
+	}
+
 	month := year.Bucket([]byte(m))
+	if month == nil {
+		return out, errors.New("Bucket does not exist for: " + y)
+	}
+
 	day := month.Bucket([]byte(d))
+	if day == nil {
+		return out, errors.New("Bucket does not exist for: " + y)
+	}
 
 	if err := day.ForEach(func(k, v []byte) error {
 		var tmp Event
@@ -109,5 +104,5 @@ func EventsForDay(db *bolt.DB, y string, m string, d string) (Day, error) {
 		return nil, err
 	}
 
-	return out, nil
+	return nil, nil
 }

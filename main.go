@@ -33,7 +33,8 @@ var (
 func main() {
 	log.Println("Starting...")
 
-	globalDb, err := bolt.Open("my.db", 0600, nil)
+	var err error
+	globalDb, err = bolt.Open("my.db", 0600, nil)
 	if err != nil {
 		log.Println(err)
 	}
@@ -56,11 +57,11 @@ func dashboard(w http.ResponseWriter, r *http.Request) {
 	log.Println("Responding to / request")
 	sd := siteData{}
 
-	tmp, err := datastore.EventsForDay(globalDb, "2017", "1", "7")
+	var err error
+	sd.Saturday, err = datastore.EventsForDay(globalDb, "2017", "1", "7")
 	if err != nil {
 		log.Println(err)
 	}
-	sd.Saturday = tmp
 
 	showPage("dashboard.html", sd, w, r)
 }
